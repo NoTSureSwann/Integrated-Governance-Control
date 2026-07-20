@@ -1,6 +1,6 @@
-from model.router import model_router
+from models.router import model_router
 import config
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 from utils.logger import log_warning
 
 class PlannerAgent(BaseAgent):

@@ -35,6 +35,11 @@ class RightPanel(QWidget):
         layout.addWidget(self.txt_reasoning)
         
         # Queue / Progress
+        layout.addWidget(QLabel("Queue Status:"))
+        self.lbl_queue = QLabel("0 tasks in queue")
+        self.lbl_queue.setStyleSheet("color: #00C250; font-weight: bold;")
+        layout.addWidget(self.lbl_queue)
+        
         layout.addWidget(QLabel("Task Progress:"))
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
@@ -49,3 +54,6 @@ class RightPanel(QWidget):
         
     def set_progress(self, percentage: int):
         self.progress_bar.setValue(percentage)
+        
+    def update_queue_status(self, count: int):
+        self.lbl_queue.setText(f"{count} tasks in queue")

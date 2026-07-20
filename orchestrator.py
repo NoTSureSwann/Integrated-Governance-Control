@@ -2,21 +2,31 @@ import os
 import json
 import datetime
 import config
-from agents.planner import PlannerAgent
-from agents.research import ResearchAgent
-from agents.developer import DeveloperAgent
-from agents.reviewer import ReviewerAgent
+from plugins.agents.planner import PlannerAgent
+from plugins.agents.research import ResearchAgent
+from plugins.agents.developer import DeveloperAgent
+from plugins.agents.executor import ExecutorAgent
+from plugins.agents.reviewer import ReviewerAgent
+from supervisor import SupervisorEngine
 from supervisor import SupervisorEngine
 from connectors.github_analyzer import GitHubAnalyzer
+from plugins.plugin_manager import PluginManager
 import utils.logger as log
 
 class NexusOrchestrator:
     def __init__(self, mock: bool = False):
         self.mock = mock
-        self.planner = PlannerAgent()
-        self.research = ResearchAgent()
-        self.developer = DeveloperAgent()
-        self.reviewer = ReviewerAgent()
+        self.plugin_manager = PluginManager()
+        self.plugin_manager.load_plugins()
+        
+        self.planner = self.plugin_manager.get_agent("PlannerAgent")
+        self.research = self.plugin_manager.get_agent("ResearchAgent")
+        self.developer = self.plugin_manager.get_agent("DeveloperAgent")
+        
+        # Inisialisasi ExecutorAgent secara manual jika belum didaftarkan di manager
+        self.executor = ExecutorAgent()
+        
+        self.reviewer = self.plugin_manager.get_agent("ReviewerAgent")
         self.supervisor = SupervisorEngine(mock=mock)
         self.github_analyzer = GitHubAnalyzer(mock=mock)
 
@@ -146,15 +156,41 @@ class NexusOrchestrator:
             "output": developer_output
         })
 
-        # 4. REVIEWER STEP (Kimi)
+        # 4. EXECUTOR STEP (Subprocess)
+        executor_reason = self.executor.get_selection_reason()
+        log.log_agent_header(self.executor.name, self.executor.model_name, executor_reason)
+        
+        # Lifecycle: before_model_call
+        nexus_hook_manager.execute_hooks("before_model_call", {"agent": self.executor.name, "model": self.executor.model_name})
+        
+        with log.console.status("[bold cyan]Executor sedang menjalankan kode dari Developer...", spinner="dots"):
+            executor_output = self.executor.execute_with_telemetry(context, user_prompt, mock=self.mock)
+            
+        # Lifecycle: after_model_call
+        model_ctx = nexus_hook_manager.execute_hooks("after_model_call", {"agent": self.executor.name, "model": self.executor.model_name, "output": executor_output})
+        executor_output = model_ctx.get("output", executor_output)
+            
+        context[self.executor.name] = executor_output
+        log.log_agent_output(self.executor.name, executor_output)
+        history.append({
+            "agent": self.executor.name,
+            "provider": self.executor.model_provider,
+            "model": self.executor.model_name,
+            "reason": executor_reason,
+            "output": executor_output
+        })
+
+        # 5. REVIEWER STEP (Kimi)
         reviewer_reason = self.reviewer.get_selection_reason()
         log.log_agent_header(self.reviewer.name, self.reviewer.model_name, reviewer_reason)
         
         # Lifecycle: before_model_call
         nexus_hook_manager.execute_hooks("before_model_call", {"agent": self.reviewer.name, "model": self.reviewer.model_name})
         
-        with log.console.status("[bold green]Reviewer sedang mengevaluasi kualitas dan logika...", spinner="dots"):
-            reviewer_output = self.reviewer.execute_with_telemetry(context, user_prompt, mock=self.mock)
+        with log.console.status("[bold green]Reviewer sedang mengevaluasi kualitas, logika, dan hasil eksekusi...", spinner="dots"):
+            # Gabungkan hasil eksekusi ke prompt pengguna untuk reviewer
+            reviewer_prompt = f"{user_prompt}\n\n[Hasil Eksekusi Kode]\n{executor_output}"
+            reviewer_output = self.reviewer.execute_with_telemetry(context, reviewer_prompt, mock=self.mock)
             
         # Lifecycle: after_model_call
         model_ctx = nexus_hook_manager.execute_hooks("after_model_call", {"agent": self.reviewer.name, "model": self.reviewer.model_name, "output": reviewer_output})

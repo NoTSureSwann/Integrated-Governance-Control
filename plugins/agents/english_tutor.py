@@ -1,5 +1,5 @@
-from model.router import model_router
-from agents.base import BaseAgent
+from models.router import model_router
+from plugins.agents.base import BaseAgent
 
 class EnglishTutorAgent(BaseAgent):
     def __init__(self, name="Nexus English Tutor", model_provider="Groq", model_name="llama-3.1-70b-versatile"):

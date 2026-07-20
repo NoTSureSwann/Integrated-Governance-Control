@@ -1,4 +1,4 @@
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 
 class SupervisorAgent(BaseAgent):
     def __init__(self, name="Nexus Supervisor", model_provider="Kimi", model_name="moonshot-v1-32k"):

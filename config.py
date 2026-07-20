@@ -4,8 +4,11 @@ from dotenv import load_dotenv
 # Load environmental variables from .env file
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_API_KEY_1 = os.getenv("GROQ_API_KEY_1", "")
+GROQ_MODEL_1 = os.getenv("GROQ_MODEL_1", "llama-3.3-70b-versatile")
+
+GROQ_API_KEY_2 = os.getenv("GROQ_API_KEY_2", "")
+GROQ_MODEL_2 = os.getenv("GROQ_MODEL_2", "openai/gpt-oss-120b")
 
 KIMI_API_KEY = os.getenv("KIMI_API_KEY", "").strip()
 KIMI_MODEL = os.getenv("KIMI_MODEL", "kimi-k2")
@@ -47,8 +50,8 @@ def validate_config():
     """
     missing = []
     # Only warn about primary keys needed by default pipeline
-    if not GROQ_API_KEY:
-        missing.append("GROQ_API_KEY is missing from environment or .env file.")
-    if not KIMI_API_KEY:
-        missing.append("KIMI_API_KEY is missing from environment or .env file.")
+    if not GROQ_API_KEY_1:
+        missing.append("GROQ_API_KEY_1 is missing from environment or .env file.")
+    if not GROQ_API_KEY_2:
+        missing.append("GROQ_API_KEY_2 is missing from environment or .env file.")
     return missing

@@ -1,6 +1,6 @@
 from utils.logger import log_info, console
 from rich.panel import Panel
-from database.db_manager import DatabaseManager, Knowledge, DatasetMetadata
+from adapters.database.db_manager import DatabaseManager, Knowledge, DatasetMetadata
 
 class GitHubAnalyzer:
     """

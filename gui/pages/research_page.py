@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEd
 from PySide6.QtCore import Qt, QThread, Signal
 import qtawesome as qta
 from connectors.github_analyzer import GitHubAnalyzer
-from memory.memory_manager import MemoryManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
 
 class ResearchWorker(QThread):
     """
@@ -33,7 +33,7 @@ class ResearchPage(QWidget):
     """
     def __init__(self):
         super().__init__()
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         self.worker = None
         self._init_ui()
         

@@ -1,7 +1,9 @@
-from database.db_manager import DatabaseManager, Conversation, Knowledge, Research, LongTerm, EnglishProgress
+from adapters.database.db_manager import DatabaseManager, Conversation, Knowledge, Research, LongTerm, EnglishProgress
 from utils.logger import log_warning
 
-class MemoryManager:
+from core.ports.memory_port import IMemoryRepository
+
+class MemoryRepositoryAdapter(IMemoryRepository):
     """
     Menyediakan interface terpusat untuk menyimpan dan mengambil data memori
     dari database utama (nexus.db atau PostgreSQL) via SQLAlchemy.
@@ -18,7 +20,7 @@ class MemoryManager:
             EventBus().publish(NexusEvent(
                 event_type="DatabaseChanged",
                 payload=sync_payload,
-                agent="MemoryManager",
+                agent="MemoryRepositoryAdapter",
                 status="SUCCESS"
             ))
         except Exception:

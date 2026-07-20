@@ -29,20 +29,14 @@ class Sidebar(QWidget):
         
         # Menu Items
         self.menus = {
-            "dashboard": ("Dashboard", "fa5s.chart-pie"),
-            "chat": ("Chat", "fa5s.comments"),
-            "research": ("Research", "fa5s.microscope"),
-            "english": ("English Trainer", "fa5s.language"),
-            "knowledge": ("Knowledge", "fa5s.book"),
-            "memory": ("Memory", "fa5s.brain"),
-            "experiments": ("Experiments", "fa5s.flask"),
-            "datasets": ("Datasets", "fa5s.database"),
-            "eda": ("Exploratory Data", "fa5s.chart-bar"),
-            "training": ("Training Analysis", "fa5s.chart-line"),
-            "repository": ("Repository", "fa5b.github"),
-            "plugins": ("Plugins", "fa5s.plug"),
-            "settings": ("Settings", "fa5s.cog"),
-            "logs": ("Logs", "fa5s.terminal")
+            "dashboard": ("Dashboard (ATHENA)", "fa5s.home"),
+            "ai_workspace": ("AI Workspace", "fa5s.laptop-code"),
+            "task_queue": ("Task Queue", "fa5s.tasks"),
+            "memory": ("Memory Inspector", "fa5s.brain"),
+            "knowledge": ("Knowledge Inspector", "fa5s.book"),
+            "console": ("Realtime Console", "fa5s.terminal"),
+            "plugins": ("Plugin Manager", "fa5s.plug"),
+            "settings": ("System Settings", "fa5s.cog")
         }
         
         self.buttons = {}

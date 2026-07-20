@@ -1,19 +1,21 @@
-# Project Nexus - AI Operating System Desktop Dashboard (SIGMA)
+# Project Nexus - AI Research Operating System (Codename: ATHENA)
 
-Project Nexus adalah sebuah **AI Operating System** modular yang dirancang untuk mendukung riset Artificial Intelligence, rekayasa perangkat lunak (*Software Engineering*), manajemen pengetahuan (*Knowledge Management*), dan pembelajaran Bahasa Inggris CEFR secara terintegrasi. 
+[![Version](https://img.shields.io/badge/Version-2.0.0-blue.svg)](https://github.com/NoTSureSwann/Integrated-Governance-Control)
+[![Architecture](https://img.shields.io/badge/Architecture-Hexagonal--Microkernel--EventDriven-brightgreen.svg)](docs/architecture/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 
-Aplikasi ini menggunakan pola arsitektur **MVC/MVVM** modular dengan antarmuka desktop modern berbasis **PySide6 (Qt)** dan loop asinkron asisten AI menggunakan **qasync**.
+**Project Nexus** (SRS v2.0 - *NEXUS AI OPERATING SYSTEM*) adalah platform *desktop AI Operating System* modular dan terdistribusi berbasis Python & PySide6 (Qt). Project Nexus bukan hanya sekadar chatbot atau AI Assistant, melainkan sebuah **AI Research Operating System** yang mampu mengelola AI Models, Multi-Agent, Knowledge Engine, Dataset, Experiment, Workflow, dan Plugin secara terintegrasi dan aman.
 
 ---
 
 ## 📜 PROJECT CONSTITUTION
 
-Aplikasi ini mematuhi dan menegakkan Konstitusi Nexus dalam setiap aktivitas logikanya:
+Aplikasi ini mematuhi dan menegakkan **Nexus Constitution** dalam setiap aktivitas logikanya:
 1. **Human First** - Prioritaskan keselamatan, otorisasi, dan niat pengguna di atas segalanya.
 2. **Safety Before Automation** - Jangan pernah melakukan tindakan destruktif pada sistem secara otomatis.
 3. **Evidence Before Conclusion** - Pisahkan FAKTA, ASUMSI, HIPOTESIS, REFERENSI, dan EKSPERIMEN.
 4. **Explain Every Decision** - Jelaskan alasan logis setiap keputusan routing model dan penulisan kode.
-5. **Modular By Default** - Pastikan komponen terpisah, terkompartemen, dan mudah diganti.
+5. **Modular By Default** - Pastikan komponen terpisah, terkompartemen, dan mudah diganti (*Decoupled & Modular*).
 6. **Reproducible Research** - Pastikan log eksperimen cukup kaya untuk mereproduksi hasil riset.
 7. **Never Assume Without Evidence** - Hindari kesimpulan terburu-buru tanpa bukti konkret.
 8. **Learn Only From Authorized Sources** - Gunakan berkas pengetahuan berizin dan umpan balik tervalidasi.
@@ -22,70 +24,110 @@ Aplikasi ini mematuhi dan menegakkan Konstitusi Nexus dalam setiap aktivitas log
 
 ---
 
-## 🧬 ARSITEKTUR LAYOUT & STRUKTUR FOLDER
+## 🏛️ ARCHITECTURE DIAGRAM (SRS v2.0 - Hexagonal Micro-Kernel)
 
-Proyek ini disusun secara modular untuk membatasi panjang file (maksimum ±300 baris) agar menjaga keterbacaan dan fleksibilitas kode:
+Project Nexus mengadopsi kombinasi arsitektur **Micro-Kernel**, **Hexagonal (Ports & Adapters)**, **Event-Driven Bus**, dan **Actor Multi-Agent Model**.
 
-```text
-project_nexus/
-├── app/                  # Main Application Entry Point
-│   └── main.py           # Inisialisasi QApplication & Event Loop Asinkron (qasync)
-├── database/             # Pengelola Database SQLite Persisten
-│   ├── db_manager.py     # Schema tabel nexus.db (Conversations, Knowledge, Research, English)
-│   └── nexus.db          # SQLite Database Utama
-├── gui/                  # Graphical User Interface Components
-│   ├── main_window.py    # Jendela Utama (Sidebar, Toolbar, Bottom Panel, Status Bar)
-│   ├── pages/            # Halaman Dashboard, Chat, Research, English, Knowledge, Settings, Plugins
-│   ├── widgets/          # Komponen UI Reusable (ChatBubble, LineChart, Sidebar, Toolbar, BottomPanel, RightPanel)
-│   ├── router/           # StackedWidget Page Navigation Router
-│   └── themes/           # Qt StyleSheet (QSS) untuk Dark & Light Themes
-├── memory/               # Pengelola CRUD Memori Asisten AI
-│   └── memory_manager.py # Logika Tulis/Baca Memori Percakapan, Jangka Panjang, Riset, & CEFR
-├── utils/                # Utilitas & Pustaka Logger Sistem
-│   └── logger.py         # Log Callback Registry untuk real-time console streaming ke UI
-├── tests/                # Unit Testing Suite
-│   └── test_memory_db.py # Pengujian Unit SQLite dan CRUD Memori
-├── requirements.txt      # Dependensi Python (PySide6, qasync, qtawesome, rich, groq)
-└── .env                  # Variabel Lingkungan (Persistensi Pengaturan API & Model)
+```mermaid
+graph TD
+    subgraph User Interface Layer
+        GUI[PySide6 Desktop GUI / SIGMA Dashboard]
+        API[API / Gateway Services]
+    end
+
+    subgraph Core Layer (Flat SRS v2.0)
+        Kernel[ATHENA AI Kernel / Scheduler]
+        Bus[Event Bus / Message Bus]
+        Cognitive[Hybrid Cognitive Pipeline]
+        Router[Model Router Layer]
+    end
+
+    subgraph Adapters & Engines Layer (Ports & Adapters)
+        Groq1[Groq Adapter 1: Llama-3.3-70b-versatile]
+        Groq2[Groq Adapter 2: OpenAI/GPT-OSS-120b]
+        PluginMgr[Plugin Engine / Manager]
+        TaskEng[Task Execution Engine]
+        DB[SQLite / Persistance DB]
+    end
+
+    subgraph Agents Swarm (Multi-Agent Swarm)
+        Supervisor[Supervisor Agent]
+        Planner[Planner Agent]
+        Research[Research Agent]
+        Developer[Developer Agent]
+        Reviewer[Reviewer Agent]
+        Executor[Executor Agent]
+    end
+
+    GUI <-->|qasync Event Loop| Bus
+    API <-->|REST / WS| Bus
+    Bus <--> Kernel
+    Kernel <--> Cognitive
+    Cognitive <--> Router
+    Router <-->|IAgentProvider| Groq1
+    Router <-->|IAgentProvider| Groq2
+    Kernel <--> PluginMgr
+    PluginMgr <--> Agents Swarm
+    Kernel <--> TaskEng
+    Kernel <--> DB
 ```
 
 ---
 
-## 📊 DATA ROUTING & PIPELINE FLOW
+## ⚙️ HYBRID COGNITIVE PIPELINE & ALGORITHMS
 
-Bagan di bawah ini menggambarkan alur kerja asinkron dari GUI, worker thread, orkestrator agen, logging callbacks, hingga persistensi memori SQLite:
+Setiap masukan dari pengguna atau sistem diproses melalui **Hybrid Cognitive Pipeline** sebelum diteruskan ke LLM, dan luaran LLM dievaluasi kembali sebelum disajikan ke pengguna.
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant GUI as ChatPage/GUI
-    participant Worker as PipelineWorker (QThread)
-    participant Agent as NexusOrchestrator
-    participant Log as Logger Callbacks
-    participant DB as SQLite (nexus.db)
+flowchart LR
+    A[Raw Input: Text/CSV/Repo/PDF] --> B[Preprocessing Engine]
+    B -->|Sanitized & Tokenized| C[Feature Engineering & TF-IDF/Vector]
+    C -->|Context & Intent Matrix| D[Security & Safety Guardrails]
+    D -->|Verified Prompt| E[Model Router & Dispatcher]
+    E -->|Route to Agent 1| F[Groq 1: Llama-3.3-70b]
+    E -->|Route to Agent 2| G[Groq 2: GPT-OSS-120b]
+    F --> H[Cognitive Evaluation Engine]
+    G --> H
+    H -->|Fact & Alignment Check| I[Evaluated Output / User Response]
+```
 
-    User->>GUI: Ketik Prompt & Klik Send
-    GUI->>DB: Save Message ("user", prompt)
-    GUI->>Worker: Start Thread (prompt, mock=config.MOCK_MODE)
-    activate Worker
-    Worker->>Agent: Exec run_pipeline(prompt)
-    activate Agent
-    
-    rect rgb(30, 30, 40)
-        note right of Agent: Multi-agent Cycle (Supervisor -> Planner -> Research -> Developer -> Reviewer)
-        Agent->>Log: log_agent_header() / log_agent_output()
-        Log-->>GUI: Emit log_received signal
-        GUI->>GUI: Update RightPanel (Reasoning) & BottomPanel (Console)
-    end
+### Algoritma Utama yang Digunakan:
+1. **Hybrid Cognitive Preprocessing & Feature Extraction**:
+   - **TF-IDF & Cosine Similarity Matrix**: Ekstraksi fitur teks dan identifikasi relevansi konteks repositori/dokumen.
+   - **Regex Sanitization & Guardrails**: Pembersihan prompt dari injeksi instruksi berbahaya (*Prompt Injection Guard*).
+2. **Actor Model Multi-Agent Orchestration**:
+   - Pola siklus supervisi (*Supervisor -> Planner -> Research -> Developer -> Reviewer -> Executor*) berdasar evaluasi skor kepuasan (*Confidence Score* $> 0.85$).
+3. **Dynamic Hexagonal Model Routing**:
+   - Routing otomatis permintaan ke provider aktif (*Dual Groq Agents*) melalui abstraksi `IAgentProvider`.
 
-    Agent-->>Worker: Return result (evaluation, history)
-    deactivate Agent
-    Worker-->>GUI: Emit pipeline_finished signal
-    deactivate Worker
-    
-    GUI->>DB: Save Message ("assistant", evaluation)
-    GUI->>GUI: Draw ChatBubble (Agent) & set Progress to 100%
+---
+
+## 📁 STRUKTUR DIREKTORI UTAMA
+
+```text
+nexus/
+├── adapters/             # Hexagonal Adapters (LLM Providers: Groq, Kimi, OpenAI)
+├── agents/               # Multi-Agent Implementations (Planner, Research, Developer, etc.)
+├── api/                  # API Endpoints & Gateway Layer
+├── cognitive/            # Hybrid Cognitive Engine (Preprocessing, Feature Eng, Evaluation)
+├── connectors/           # External Connectors (GitHub Analyzer, DB Connectors)
+├── database/             # SQLite Persistance & Database Manager (nexus.db)
+├── docs/                 # Documentation & Architecture Decision Records (ADRs)
+│   └── architecture/     # ADR-001, MIS-001, EMC-001 Specification Docs
+├── gui/                  # PySide6 Desktop GUI Pages, Widgets, Themes & QSS
+├── kernel/               # ATHENA AI Kernel, Scheduler & Task Engine
+├── memory/               # Memory Manager (Conversation, Long-Term, CEFR)
+├── models/               # Model Router & Model Definitions
+├── orchestrator/         # Multi-Agent Workflow Orchestrator
+├── plugins/              # Plugin Manager & Plugin Infrastructure
+├── ports/                # Hexagonal Interfaces (IAgentProvider, ITaskEngine)
+├── tests/                # Unit Testing Suite (PyTest / Unittest)
+├── utils/                # Logger, Callbacks & Helper Functions
+├── vectorstore/          # Vector Embeddings & Knowledge Engine
+├── workflow/             # Workflow Pipeline Execution Engine
+├── app/                  # Application Entrypoint (main.py)
+├── config.py             # System Configuration & Environment Validator
+└── .env                  # Environment Variables (API Keys & Model Specs)
 ```
 
 ---
@@ -93,34 +135,37 @@ sequenceDiagram
 ## 🚀 PANDUAN INSTALASI & MENJALANKAN APLIKASI
 
 ### 1. Prasyarat
-Pastikan Anda menggunakan Python versi 3.10 atau yang lebih baru.
+- Python vers 3.10 atau yang lebih baru.
 
 ### 2. Instalasi Dependensi
-Jalankan perintah berikut untuk memasang PySide6, qasync, qtawesome, dan library AI lainnya:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Eksekusi Unit Test
-Pastikan seluruh integrasi database dan memori lulus tes mandiri dengan perintah:
-```bash
-python -m unittest tests/test_memory_db.py
+### 3. Pengaturan `.env`
+Buat berkas `.env` di direktori utama dengan konfigurasi Groq Dual-Agent:
+```env
+GROQ_API_KEY_1=gsk_your_groq_api_key_1_here
+GROQ_MODEL_1=llama-3.3-70b-versatile
+
+GROQ_API_KEY_2=gsk_your_groq_api_key_2_here
+GROQ_MODEL_2=openai/gpt-oss-120b
+
+MOCK_MODE=False
 ```
 
-### 4. Menjalankan Dashboard Desktop GUI
-Jalankan aplikasi desktop dengan perintah:
+### 4. Eksekusi Unit Test
+```bash
+python -m unittest discover -s tests
+```
+
+### 5. Menjalankan Desktop GUI
 ```bash
 python app/main.py
 ```
 
 ---
 
-## 🛡️ FITUR HALAMAN UTAMA
+## 📄 LISENSI & KONTRIBUSI
 
-1. **Dashboard Page**: Pemantauan metrik dinamis (CPU/RAM) real-time menggunakan grafik QPainter anti-alias bergradien, tabel log telemetri terbaru, dan status modul.
-2. **Chat Page**: Antarmuka gelembung chat (ChatGPT-like) asinkron dengan fitur Copy, Regenerate, dan streaming logs ke panel samping.
-3. **Research Page**: Pengunggahan dokumen lokal (PDF/Markdown) serta analisis repositori GitHub terintegrasi dengan logs real-time.
-4. **English Trainer Page**: Dashboard kemajuan CEFR dinamis (Vocabulary, Grammar, Writing) dan checker tata bahasa dengan AI tutor.
-5. **Knowledge Wiki Page**: Mesin pencarian basis pengetahuan internal bersistem list-detail splitter dan popup dialog penambahan konsep.
-6. **Plugins Manager**: Panel kontrol status koneksi untuk 8 tipe database/connector (PostgreSQL, Docker, ChromaDB, dll).
-7. **Settings Manager**: Mengatur API Keys, Pilihan Model LLM, sakelar simulasi offline (Mock Mode), dan menyimpannya langsung ke `.env`.
+Hak cipta dilindungi undang-undang. Diikutsertakan di bawah ketentuan **Project Nexus Governance Control**.

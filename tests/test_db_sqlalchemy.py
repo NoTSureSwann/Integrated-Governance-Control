@@ -1,5 +1,5 @@
 import unittest
-from database.db_manager import DatabaseManager, Conversation, Knowledge
+from adapters.database.db_manager import DatabaseManager, Conversation, Knowledge
 from sqlalchemy.orm import Session
 
 class TestDBSqlAlchemy(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestDBSqlAlchemy(unittest.TestCase):
         session.close()
 
     def test_dataset_metadata_orm(self):
-        from database.db_manager import DatasetMetadata
+        from adapters.database.db_manager import DatasetMetadata
         session = self.db.get_session()
         
         # Test Insert

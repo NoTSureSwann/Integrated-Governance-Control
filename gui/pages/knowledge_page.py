@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QListWidget, QTextEdit, QSplitter, QDialog, QFormLayout, QDialogButtonBox, QMessageBox
 from PySide6.QtCore import Qt
 import qtawesome as qta
-from memory.memory_manager import MemoryManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
 
 class AddConceptDialog(QDialog):
     """
@@ -59,7 +59,7 @@ class KnowledgePage(QWidget):
     """
     def __init__(self):
         super().__init__()
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         self._init_ui()
         self.load_knowledge_list()
         

@@ -14,6 +14,7 @@ custom_theme = Theme({
     "research": "bold magenta",
     "developer": "bold yellow",
     "reviewer": "bold green",
+    "executor": "bold cyan",
     "githubanalyzer": "bold cyan",
 })
 
@@ -59,6 +60,8 @@ def _emit_log(level: str, message: str, agent_name: str = None):
                 model = config.KIMI_MODEL
             elif agent_name == "Developer":
                 model = config.GROQ_MODEL
+            elif agent_name == "Executor":
+                model = "Subprocess"
             elif agent_name == "Reviewer":
                 model = config.KIMI_MODEL
                 

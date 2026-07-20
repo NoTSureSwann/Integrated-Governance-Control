@@ -1,4 +1,4 @@
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 
 class KnowledgeAgent(BaseAgent):
     def __init__(self, name="Nexus Knowledge", model_provider="System", model_name="Local-Knowledge-Graph"):

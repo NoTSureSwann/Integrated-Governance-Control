@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QStackedWidget, QLabel, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QStackedWidget, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout
 from PySide6.QtCore import Qt
 from gui.pages.dashboard_page import DashboardPage
 from gui.pages.chat_page import ChatPage
@@ -56,8 +56,39 @@ class PageRouter(QStackedWidget):
     def _create_placeholder(self, route_id: str) -> QWidget:
         widget = QWidget()
         layout = QVBoxLayout(widget)
-        lbl = QLabel(f"Page '{route_id.capitalize()}' is under construction.")
-        lbl.setAlignment(Qt.AlignCenter)
-        lbl.setObjectName("placeholder_label")
-        layout.addWidget(lbl)
+        
+        # Spacer top
+        layout.addStretch()
+        
+        # Title
+        lbl_title = QLabel(f"{route_id.upper()} MODULE")
+        lbl_title.setAlignment(Qt.AlignCenter)
+        lbl_title.setStyleSheet("font-size: 28px; font-weight: bold; color: #007ACC;")
+        layout.addWidget(lbl_title)
+        
+        # Subtitle
+        lbl_sub = QLabel("This module is currently under construction in Project Nexus.")
+        lbl_sub.setAlignment(Qt.AlignCenter)
+        lbl_sub.setStyleSheet("font-size: 16px; color: #666; margin-top: 10px; margin-bottom: 20px;")
+        layout.addWidget(lbl_sub)
+        
+        # Button
+        btn_back = QPushButton("Go Back to Dashboard")
+        btn_back.setFixedWidth(200)
+        btn_back.setMinimumHeight(40)
+        btn_back.setStyleSheet("font-weight: bold; font-size: 14px;")
+        
+        # Center the button
+        btn_layout = QHBoxLayout()
+        btn_layout.addStretch()
+        btn_layout.addWidget(btn_back)
+        btn_layout.addStretch()
+        layout.addLayout(btn_layout)
+        
+        # Wiring action
+        btn_back.clicked.connect(lambda: self.switch_to("dashboard"))
+        
+        # Spacer bottom
+        layout.addStretch()
+        
         return widget

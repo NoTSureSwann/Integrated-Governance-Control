@@ -1,4 +1,4 @@
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 
 class MemoryAgent(BaseAgent):
     def __init__(self, name="Nexus Memory", model_provider="System", model_name="Local-Vector-DB"):

@@ -4,7 +4,7 @@ import shutil
 import uuid
 from unittest.mock import patch
 from connectors.github_connector import GitHubConnector
-from database.db_manager import DatabaseManager
+from adapters.database.db_manager import DatabaseManager
 
 class TestGitHubConnector(unittest.TestCase):
     def setUp(self):
@@ -78,7 +78,7 @@ Details of Section A.
         session = db.get_session()
         
         # Check Knowledge entries (Markdown sections)
-        from database.db_manager import Knowledge, DatasetMetadata
+        from adapters.database.db_manager import Knowledge, DatasetMetadata
         
         intro_knowledge = session.query(Knowledge).filter_by(key="github:mock-repo:README.md#Title").first()
         self.assertIsNotNone(intro_knowledge)

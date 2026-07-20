@@ -1,5 +1,6 @@
 import unittest
-from model.router import ModelRouter
+from models.router import ModelRouter
+from adapters.llm.groq_adapter import GroqAdapter
 
 class TestModelRouter(unittest.TestCase):
     def setUp(self):
@@ -14,7 +15,7 @@ class TestModelRouter(unittest.TestCase):
             model="llama3-model",
             mock=True
         )
-        self.assertIn("[MOCK - GROQ - llama3-model]", res)
+        self.assertIn("[MOCK - Groq - llama3-model]", res)
         self.assertIn("Hello!", res)
 
     def test_mock_fallback_on_missing_key(self):
@@ -28,7 +29,7 @@ class TestModelRouter(unittest.TestCase):
                 provider="Groq",
                 mock=False # Don't force mock, but key is missing
             )
-            self.assertIn("[MOCK - GROQ -", res)
+            self.assertIn("[MOCK - Groq -", res)
         finally:
             config.GROQ_API_KEY = old_key
 

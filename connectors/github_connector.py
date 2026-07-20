@@ -6,7 +6,7 @@ import ast
 import re
 from typing import Dict, Any, List
 from utils.logger import log_info, log_error, log_warning
-from database.db_manager import DatabaseManager, Knowledge, DatasetMetadata, GithubIndex
+from adapters.database.db_manager import DatabaseManager, Knowledge, DatasetMetadata, GithubIndex
 from services.hook_manager import nexus_hook_manager
 
 class GitHubConnector:

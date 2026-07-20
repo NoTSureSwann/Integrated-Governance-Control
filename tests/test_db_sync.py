@@ -5,8 +5,8 @@ import json
 import time
 from services.event_bus import EventBus, NexusEvent
 from services.db_sync_engine import DatabaseSyncEngine
-from memory.memory_manager import MemoryManager
-from database.db_manager import DatabaseManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
+from adapters.database.db_manager import DatabaseManager
 
 class TestDatabaseSyncEngine(unittest.TestCase):
     def setUp(self):
@@ -16,7 +16,7 @@ class TestDatabaseSyncEngine(unittest.TestCase):
         # Bersihkan tabel uji
         # Bersihkan tabel uji
         db = DatabaseManager()
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         self.memory.clear_all_memory()
         
         # Hapus file backup lama jika ada

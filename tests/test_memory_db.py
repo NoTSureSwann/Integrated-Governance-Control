@@ -1,8 +1,8 @@
 import unittest
 import os
 import sqlite3
-from database.db_manager import DatabaseManager
-from memory.memory_manager import MemoryManager
+from adapters.database.db_manager import DatabaseManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
 
 class TestMemoryDatabase(unittest.TestCase):
     """
@@ -15,7 +15,7 @@ class TestMemoryDatabase(unittest.TestCase):
         cls.db_manager = DatabaseManager(db_path=cls.test_db_path)
         
         # Override db path di MemoryManager untuk pengujian
-        cls.memory = MemoryManager()
+        cls.memory = MemoryRepositoryAdapter()
         cls.memory.db = cls.db_manager
 
     @classmethod

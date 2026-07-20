@@ -5,7 +5,7 @@ import json
 import os
 from services.event_bus import EventBus, NexusEvent
 from utils.logger import log_info, log_warning
-from database.db_manager import DatabaseManager
+from adapters.database.db_manager import DatabaseManager
 
 class DatabaseSyncEngine:
     """

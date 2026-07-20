@@ -1,9 +1,9 @@
 import json
-from model.router import model_router
+from models.router import model_router
 import config
 from utils.logger import log_warning, log_info, console
 from rich.panel import Panel
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 
 class SupervisorEngine:
     """

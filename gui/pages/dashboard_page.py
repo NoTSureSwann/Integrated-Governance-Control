@@ -94,10 +94,21 @@ class DashboardPage(QWidget):
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
         
-        # Heder Page
-        lbl_title = QLabel("👁️ Live Metrics & Dashboard")
+        # Header Page with Toggle Button
+        header_layout = QHBoxLayout()
+        lbl_title = QLabel("👁️ Live Metrics & Dashboard (ATHENA v1.0)")
         lbl_title.setStyleSheet("font-size: 20px; font-weight: bold; color: #FFFFFF;")
-        main_layout.addWidget(lbl_title)
+        header_layout.addWidget(lbl_title)
+        
+        header_layout.addStretch()
+        
+        from PySide6.QtWidgets import QPushButton
+        self.btn_toggle_theme = QPushButton("🌓 Toggle Theme")
+        self.btn_toggle_theme.setStyleSheet("padding: 5px 10px; background-color: #0E639C; color: white; border-radius: 4px;")
+        self.btn_toggle_theme.clicked.connect(self._toggle_theme)
+        header_layout.addWidget(self.btn_toggle_theme)
+        
+        main_layout.addLayout(header_layout)
         
         # Grid Metric Cards
         grid_layout = QGridLayout()
@@ -118,6 +129,25 @@ class DashboardPage(QWidget):
         grid_layout.addWidget(self.card_db, 1, 2)
         
         main_layout.addLayout(grid_layout)
+        
+        # Fitur Unggulan (ATHENA Showcase)
+        showcase_frame = QFrame()
+        showcase_frame.setStyleSheet("background-color: #2D2D30; border-radius: 8px; border: 1px solid #007ACC;")
+        showcase_layout = QVBoxLayout(showcase_frame)
+        showcase_title = QLabel("✨ ATHENA OS Highlighted Features")
+        showcase_title.setStyleSheet("font-weight: bold; font-size: 14px; color: #007ACC;")
+        showcase_layout.addWidget(showcase_title)
+        
+        features_text = (
+            "• <b>Task Scheduler & Queue</b>: Prioritas tugas otomatis.\n"
+            "• <b>Context Manager</b>: Manajemen memori sesi (Working/Long/Knowledge).\n"
+            "• <b>Event-Driven Bus</b>: Sistem terdistribusi real-time via Publish/Subscribe.\n"
+            "• <b>Multi-Agent Orchestrator</b>: Kimi (Coding), Llama (Reasoning), Executor."
+        )
+        lbl_features = QLabel(features_text)
+        lbl_features.setTextFormat(Qt.RichText)
+        showcase_layout.addWidget(lbl_features)
+        main_layout.addWidget(showcase_frame)
         
         # Grafik Baris (CPU & RAM)
         charts_layout = QHBoxLayout()
@@ -141,6 +171,11 @@ class DashboardPage(QWidget):
         )
         main_layout.addWidget(self.table)
         
+    def _toggle_theme(self):
+        main_win = self.window()
+        if hasattr(main_win, 'theme_manager'):
+            main_win.theme_manager.toggle_theme()
+            
     def _refresh_dashboard(self):
         """Membaca Telemetry Database dan Memperbarui Layar."""
         if not os.path.exists(self.db_path):
@@ -184,11 +219,11 @@ class DashboardPage(QWidget):
             self.table.setRowCount(min(5, len(rows)))
             for row_idx, r in enumerate(rows[:5]):
                 # timestamp, agent, model, task, latency
-                self.table.setItem(row_idx, 0, QTableWidgetItem(r[7]))
-                self.table.setItem(row_idx, 1, QTableWidgetItem(r[2]))
-                self.table.setItem(row_idx, 2, QTableWidgetItem(r[3]))
-                self.table.setItem(row_idx, 3, QTableWidgetItem(r[6]))
-                self.table.setItem(row_idx, 4, QTableWidgetItem(f"{r[4]:.1f} ms"))
+                self.table.setItem(row_idx, 0, QTableWidgetItem(str(r[7]) if r[7] else ""))
+                self.table.setItem(row_idx, 1, QTableWidgetItem(str(r[2]) if r[2] else ""))
+                self.table.setItem(row_idx, 2, QTableWidgetItem(str(r[3]) if r[3] else ""))
+                self.table.setItem(row_idx, 3, QTableWidgetItem(str(r[6]) if r[6] else ""))
+                self.table.setItem(row_idx, 4, QTableWidgetItem(f"{r[4]:.1f} ms" if r[4] is not None else ""))
                 
         except Exception:
             pass

@@ -3,8 +3,8 @@ import re
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit, QPushButton, QProgressBar, QTabWidget, QFrame
 from PySide6.QtCore import Qt, QThread, Signal
 import qtawesome as qta
-from memory.memory_manager import MemoryManager
-from agents.english_tutor import EnglishTutorAgent
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
+from plugins.agents.english_tutor import EnglishTutorAgent
 import config
 from utils.logger import log_info
 
@@ -83,7 +83,7 @@ class EnglishTutorWorker(QThread):
 class EnglishPage(QWidget):
     def __init__(self):
         super().__init__()
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         self.worker = None
         self._init_ui()
         self.refresh_dashboard()

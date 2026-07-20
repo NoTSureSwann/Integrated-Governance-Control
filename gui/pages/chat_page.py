@@ -5,30 +5,10 @@ import qtawesome as qta
 from gui.widgets.chat_bubble import ChatBubble
 from orchestrator import NexusOrchestrator
 import utils.logger as log
-from memory.memory_manager import MemoryManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
 from services.websocket_client import nexus_ws_client
 
-class PipelineWorker(QThread):
-    """
-    Worker Thread untuk menjalankan pipeline orkestrasi agen secara asinkron.
-    """
-    pipeline_finished = Signal(dict)
-    pipeline_error = Signal(str)
-
-    def __init__(self, prompt: str, mock: bool = True):
-        super().__init__()
-        self.prompt = prompt
-        self.mock = mock
-
-    def run(self):
-        try:
-            # Jalankan orkestrator utama
-            orchestrator = NexusOrchestrator(mock=self.mock)
-            result = orchestrator.run_pipeline(self.prompt)
-            self.pipeline_finished.emit(result)
-        except Exception as e:
-            self.pipeline_error.emit(str(e))
-
+from services.task_engine import task_engine
 
 class ChatPage(QWidget):
     """
@@ -38,7 +18,6 @@ class ChatPage(QWidget):
     def __init__(self):
         super().__init__()
         self._init_ui()
-        self.worker = None
         self.last_prompt = ""
         
     def _init_ui(self):
@@ -107,7 +86,7 @@ class ChatPage(QWidget):
         
         # Simpan teks evaluasi terakhir untuk di-copy
         self.last_evaluation = ""
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         
         # Hubungkan ke WebSocket Client
         nexus_ws_client.event_received.connect(self._on_event_received)
@@ -122,7 +101,7 @@ class ChatPage(QWidget):
 
     def _send_message(self):
         prompt = self.txt_input.toPlainText().strip()
-        if not prompt or (self.worker and self.worker.isRunning()):
+        if not prompt:
             return
             
         self.last_prompt = prompt
@@ -147,12 +126,9 @@ class ChatPage(QWidget):
         self.btn_copy.setEnabled(False)
         self.btn_regenerate.setEnabled(False)
         
-        # 4. Jalankan Thread Asinkron (Membaca dari config)
+        # 4. Masukkan task ke TaskEngine secara asinkron
         import config
-        self.worker = PipelineWorker(prompt, mock=config.MOCK_MODE)
-        self.worker.pipeline_finished.connect(self._handle_pipeline_finished)
-        self.worker.pipeline_error.connect(self._handle_pipeline_error)
-        self.worker.start()
+        task_engine.submit_task(prompt, mock_mode=config.MOCK_MODE)
 
     def _on_event_received(self, event):
         """Menerima dan memproses event dari EventBus secara asinkron (Thread-safe)."""
@@ -165,17 +141,25 @@ class ChatPage(QWidget):
         agent = event.agent
         
         # 1. Tulis logs ke Bottom Panel
-        if evt_type in ("TaskStarted", "AgentThinking", "AgentFinished", "TaskCompleted", "TaskFailed"):
+        if evt_type in ("TaskQueued", "TaskStarted", "AgentThinking", "AgentFinished", "TaskCompleted", "TaskFailed"):
             log_line = f"[{evt_type}] {msg}"
             if agent and agent != "System":
                 log_line = f"[{evt_type} - {agent.upper()}] {msg}"
             main_win.bottom_panel.append_log(log_line)
             
         # 2. Update progress bar dan reasoning di Right Panel
-        if evt_type == "TaskStarted":
+        if evt_type == "TaskQueued":
+            queue_size = event.payload.get("queue_size", 1)
+            main_win.right_panel.update_queue_status(queue_size)
+            
+        elif evt_type == "TaskStarted":
             main_win.right_panel.update_task(msg)
             main_win.right_panel.txt_reasoning.clear()
             main_win.right_panel.set_progress(5)
+            # Karena sudah mulai, queue size harusnya berkurang (asumsi sederhana)
+            current_q = getattr(main_win.right_panel, "_current_q", 1)
+            main_win.right_panel._current_q = max(0, current_q - 1)
+            main_win.right_panel.update_queue_status(main_win.right_panel._current_q)
             
         elif evt_type == "AgentThinking":
             main_win.right_panel.append_reasoning(f"\n--- {agent.upper()} START ---")
@@ -188,6 +172,14 @@ class ChatPage(QWidget):
                 
         elif evt_type == "AgentFinished":
             main_win.right_panel.append_reasoning(f"\n[OUTPUT]:\n{msg[:200]}...\n--- {agent.upper()} COMPLETE ---")
+            
+        elif evt_type == "TaskCompleted":
+            result = event.payload.get("result", {})
+            self._handle_pipeline_finished(result)
+            
+        elif evt_type == "TaskFailed":
+            err_msg = event.payload.get("error", "Unknown error")
+            self._handle_pipeline_error(err_msg)
 
     def _handle_pipeline_finished(self, result: dict):
         # 1. Tampilkan Gelembung Balasan Evaluasi Akhir dari Reviewer Agent & Simpan ke Memori

@@ -3,6 +3,7 @@ import uuid
 import threading
 from dataclasses import dataclass, field
 from PySide6.QtCore import QObject, Signal
+from core.ports.event_bus_port import IEventBus
 
 @dataclass
 class NexusEvent:
@@ -19,7 +20,7 @@ class NexusEvent:
     timestamp: str = field(default_factory=lambda: datetime.datetime.now().isoformat())
 
 
-class EventBus:
+class EventBus(IEventBus):
     """
     Thread-safe Singleton Event Bus untuk komunikasi dekapel (decoupled) antar modul.
     """

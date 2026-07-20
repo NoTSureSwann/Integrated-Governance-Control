@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QLabel, QMessageBox
 from PySide6.QtCore import Qt
 import qtawesome as qta
-from memory.memory_manager import MemoryManager
+from adapters.database.memory_adapter import MemoryRepositoryAdapter
 
 class MemoryPage(QWidget):
     """
@@ -10,7 +10,7 @@ class MemoryPage(QWidget):
     """
     def __init__(self):
         super().__init__()
-        self.memory = MemoryManager()
+        self.memory = MemoryRepositoryAdapter()
         self._init_ui()
         self._seed_mock_data_if_empty()
         self.load_all_memories()
@@ -108,38 +108,38 @@ class MemoryPage(QWidget):
         convs = self.memory.get_conversation_history()
         self.table_conv.setRowCount(len(convs))
         for idx, r in enumerate(convs):
-            self.table_conv.setItem(idx, 0, QTableWidgetItem(r[0].upper()))
-            self.table_conv.setItem(idx, 1, QTableWidgetItem(r[1]))
-            self.table_conv.setItem(idx, 2, QTableWidgetItem(r[2]))
+            self.table_conv.setItem(idx, 0, QTableWidgetItem(r[0].upper() if r[0] else ""))
+            self.table_conv.setItem(idx, 1, QTableWidgetItem(r[1] if r[1] else ""))
+            self.table_conv.setItem(idx, 2, QTableWidgetItem(r[2].strftime("%Y-%m-%d %H:%M:%S") if hasattr(r[2], 'strftime') else str(r[2]) if r[2] is not None else ""))
             
         # 2. Load Knowledge
         knows = self.memory.get_all_knowledge()
         self.table_know.setRowCount(len(knows))
         for idx, r in enumerate(knows):
             # key, value, source, category, timestamp
-            self.table_know.setItem(idx, 0, QTableWidgetItem(r[0]))
-            self.table_know.setItem(idx, 1, QTableWidgetItem(r[1]))
-            self.table_know.setItem(idx, 2, QTableWidgetItem(r[2]))
-            self.table_know.setItem(idx, 3, QTableWidgetItem(r[3]))
-            self.table_know.setItem(idx, 4, QTableWidgetItem(r[4]))
+            self.table_know.setItem(idx, 0, QTableWidgetItem(r[0] if r[0] else ""))
+            self.table_know.setItem(idx, 1, QTableWidgetItem(r[1] if r[1] else ""))
+            self.table_know.setItem(idx, 2, QTableWidgetItem(r[2] if r[2] else ""))
+            self.table_know.setItem(idx, 3, QTableWidgetItem(r[3] if r[3] else ""))
+            self.table_know.setItem(idx, 4, QTableWidgetItem(r[4].strftime("%Y-%m-%d %H:%M:%S") if hasattr(r[4], 'strftime') else str(r[4]) if r[4] is not None else ""))
             
         # 3. Load Research
         res = self.memory.get_all_research()
         self.table_res.setRowCount(len(res))
         for idx, r in enumerate(res):
-            self.table_res.setItem(idx, 0, QTableWidgetItem(r[0]))
-            self.table_res.setItem(idx, 1, QTableWidgetItem(r[1]))
-            self.table_res.setItem(idx, 2, QTableWidgetItem(r[2]))
-            self.table_res.setItem(idx, 3, QTableWidgetItem(r[3]))
+            self.table_res.setItem(idx, 0, QTableWidgetItem(r[0] if r[0] else ""))
+            self.table_res.setItem(idx, 1, QTableWidgetItem(r[1] if r[1] else ""))
+            self.table_res.setItem(idx, 2, QTableWidgetItem(r[2] if r[2] else ""))
+            self.table_res.setItem(idx, 3, QTableWidgetItem(r[3].strftime("%Y-%m-%d %H:%M:%S") if hasattr(r[3], 'strftime') else str(r[3]) if r[3] is not None else ""))
             
         # 4. Load Long Term
         lts = self.memory.get_all_long_term()
         self.table_lt.setRowCount(len(lts))
         for idx, r in enumerate(lts):
-            self.table_lt.setItem(idx, 0, QTableWidgetItem(r[0]))
-            self.table_lt.setItem(idx, 1, QTableWidgetItem(r[1]))
-            self.table_lt.setItem(idx, 2, QTableWidgetItem(str(r[2])))
-            self.table_lt.setItem(idx, 3, QTableWidgetItem(r[3]))
+            self.table_lt.setItem(idx, 0, QTableWidgetItem(r[0] if r[0] else ""))
+            self.table_lt.setItem(idx, 1, QTableWidgetItem(r[1] if r[1] else ""))
+            self.table_lt.setItem(idx, 2, QTableWidgetItem(str(r[2]) if r[2] is not None else ""))
+            self.table_lt.setItem(idx, 3, QTableWidgetItem(r[3].strftime("%Y-%m-%d %H:%M:%S") if hasattr(r[3], 'strftime') else str(r[3]) if r[3] is not None else ""))
 
     def _clear_all_memory_prompt(self):
         reply = QMessageBox.question(

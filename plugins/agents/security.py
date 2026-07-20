@@ -1,4 +1,4 @@
-from agents.base import BaseAgent
+from plugins.agents.base import BaseAgent
 
 class SecurityAgent(BaseAgent):
     def __init__(self, name="Nexus Security", model_provider="Groq", model_name="llama-3.1-8b-instant"):

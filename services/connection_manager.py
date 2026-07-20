@@ -115,7 +115,7 @@ class ConnectionManager:
         status = {}
         
         # 1. Uji Database (SQLite/PostgreSQL) via SQLAlchemy
-        from database.db_manager import DatabaseManager
+        from adapters.database.db_manager import DatabaseManager
         import config
         
         db_type = "PostgreSQL" if config.DB_HOST else "SQLite"
