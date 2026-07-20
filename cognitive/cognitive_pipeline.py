@@ -2,16 +2,21 @@ import time
 from cognitive.preprocessing import PreprocessingModule
 from cognitive.feature_engineering import FeatureEngineeringModule
 from cognitive.evaluation_engine import EvaluationEngine
+from vectorstore.vector_db import vector_db
 
 class CognitivePipeline:
     """
     Orchestrator utama untuk Hybrid Cognitive Pipeline.
-    Mengalirkan teks pengguna melalui Preprocessing -> NLP Features -> (LLM) -> Evaluation.
+    Mengalirkan teks pengguna melalui Preprocessing -> NLP Features -> Semantic Search (RAG) -> Evaluation.
     """
     def __init__(self):
         self.preprocessor = PreprocessingModule()
         self.feature_extractor = FeatureEngineeringModule()
         self.evaluator = EvaluationEngine()
+        
+        # Build vector index saat Pipeline diinisialisasi
+        print("[CognitiveEngine] Inisialisasi Vector Database...")
+        vector_db.build_index()
 
     def process_input(self, user_input: str) -> dict:
         """
@@ -25,10 +30,21 @@ class CognitivePipeline:
         # 2. Feature Engineering & Embeddings
         features = self.feature_extractor.extract_features(prep_result["tokens"], prep_result["normalized_text"])
         
+        # 3. Semantic Search / RAG Retrieval
+        print("[CognitiveEngine] Mencari konteks relevan di Vectorstore...")
+        search_results = vector_db.search(prep_result["normalized_text"], top_k=2)
+        
+        rag_context = ""
+        if search_results:
+            rag_context = "\n".join([f"Konteks [{res['metadata']['sector']} - {res['metadata']['filename']}]: {res['content'][:500]}..." for res in search_results])
+            print(f"[CognitiveEngine] Ditemukan {len(search_results)} dokumen relevan.")
+        
         return {
             "original_prompt": user_input,
             "preprocessing": prep_result,
-            "features": features
+            "features": features,
+            "semantic_context": rag_context,
+            "raw_search_results": search_results
         }
 
     def process_output(self, original_prompt: str, llm_response: str) -> dict:
