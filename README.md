@@ -30,19 +30,19 @@ Project Nexus mengadopsi kombinasi arsitektur **Micro-Kernel**, **Hexagonal (Por
 
 ```mermaid
 graph TD
-    subgraph User Interface Layer
+    subgraph UILayer [User Interface Layer]
         GUI[PySide6 Desktop GUI / SIGMA Dashboard]
         API[API / Gateway Services]
     end
 
-    subgraph Core Layer (Flat SRS v2.0)
+    subgraph CoreLayer [Core Layer Flat SRS v2.0]
         Kernel[ATHENA AI Kernel / Scheduler]
         Bus[Event Bus / Message Bus]
         Cognitive[Hybrid Cognitive Pipeline]
         Router[Model Router Layer]
     end
 
-    subgraph Adapters & Engines Layer (Ports & Adapters)
+    subgraph AdaptersLayer [Adapters and Engines Layer Ports and Adapters]
         Groq1[Groq Adapter 1: Llama-3.3-70b-versatile]
         Groq2[Groq Adapter 2: OpenAI/GPT-OSS-120b]
         PluginMgr[Plugin Engine / Manager]
@@ -50,7 +50,7 @@ graph TD
         DB[SQLite / Persistance DB]
     end
 
-    subgraph Agents Swarm (Multi-Agent Swarm)
+    subgraph SwarmLayer [Agents Swarm Multi-Agent Swarm]
         Supervisor[Supervisor Agent]
         Planner[Planner Agent]
         Research[Research Agent]
