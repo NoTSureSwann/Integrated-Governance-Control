@@ -17,3 +17,12 @@ database/*.db
 .idea/
 .DS_Store
 Thumbs.db
+
+# Data & Documents
+datasets/raw/*
+!datasets/raw/.gitkeep
+knowledge/documents/*
+!knowledge/documents/.gitkeep
+
+!datasets/raw/*/.gitkeep
+!knowledge/documents/*/.gitkeep

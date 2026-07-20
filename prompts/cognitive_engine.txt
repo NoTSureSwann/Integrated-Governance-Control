@@ -1,0 +1,564 @@
+<USER_REQUEST>
+==========================================================
+PROJECT NEXUS
+
+MODULE SPECIFICATION
+
+NEXUS COGNITIVE ENGINE
+
+Version : 1.0
+
+==========================================================
+
+MISSION
+
+Bangun sebuah Cognitive Engine
+yang menjadi pusat pemrosesan
+seluruh interaksi AI
+di dalam Project Nexus.
+
+Cognitive Engine bukan chatbot biasa.
+
+Cognitive Engine adalah AI Processing Layer
+yang menghubungkan
+
+User
+
+Knowledge Engine
+
+Dataset Engine
+
+Memory Engine
+
+Safety Engine
+
+Plugin Engine
+
+Workflow Engine
+
+Repository Engine
+
+serta AI Models.
+
+==========================================================
+
+PRIMARY OBJECTIVE
+
+Setiap input yang diterima
+harus diproses melalui
+Hybrid Cognitive Pipeline
+sebelum dikirim
+ke AI Model.
+
+Setiap output AI
+harus dievaluasi kembali
+sebelum diberikan kepada User.
+
+==========================================================
+
+SUPPORTED INPUT
+
+Text
+
+Conversation
+
+CSV
+
+JSON
+
+JSONL
+
+Markdown
+
+PDF
+
+DOC
+
+DOCX
+
+YAML
+
+XML
+
+TXT
+
+Python Source Code
+
+Git Repository
+
+Image
+
+Audio (Future)
+
+Video (Future)
+
+==========================================================
+
+HYBRID COGNITIVE PIPELINE
+
+Input
+
+↓
+
+Language Detection
+
+↓
+
+Preprocessing
+
+↓
+
+Normalization
+
+↓
+
+Tokenization
+
+↓
+
+Feature Engineering
+
+↓
+
+Knowledge Retrieval
+
+↓
+
+Memory Retrieval
+
+↓
+
+Context Injection
+
+↓
+
+Prompt Construction
+
+↓
+
+Task Classification
+
+↓
+
+Model Routing
+
+↓
+
+AI Model Prediction
+
+↓
+
+Response Evaluation
+
+↓
+
+Bias Evaluation
+
+↓
+
+Hallucination Evaluation
+
+↓
+
+Confidence Scoring
+
+↓
+
+Hybrid Intensity Scoring
+
+↓
+
+Safety Validation
+
+↓
+
+Response Ranking
+
+↓
+
+Knowledge Update
+
+↓
+
+Memory Update
+
+↓
+
+Realtime Dashboard
+
+↓
+
+Output
+
+==========================================================
+
+PREPROCESSING
+
+Unicode Normalization
+
+Case Folding
+
+Noise Removal
+
+Whitespace Cleanup
+
+Emoji Detection
+
+URL Detection
+
+Code Block Detection
+
+Language Detection
+
+Sentence Segmentation
+
+Tokenization
+
+Stopword Handling
+
+Lemmatization
+
+Stemming
+
+==========================================================
+
+FEATURE ENGINEERING
+
+TF-IDF
+
+Bag of Words
+
+N-Gram
+
+POS Tagging
+
+Named Entity Recognition
+
+Dependency Parsing
+
+Keyword Extraction
+
+Sentence Embedding
+
+Semantic Embedding
+
+Topic Modeling
+
+Lexicon Features
+
+Emotion Features
+
+Context Features
+
+==========================================================
+
+MODEL ROUTER
+
+Tentukan model
+berdasarkan jenis task.
+
+Reasoning
+
+↓
+
+Llama
+
+Coding
+
+↓
+
+Kimi
+
+Documentation
+
+↓
+
+Kimi + Llama
+
+Research
+
+↓
+
+Knowledge Engine + Llama
+
+Repository Analysis
+
+↓
+
+Kimi
+
+Dataset Analysis
+
+↓
+
+Knowledge Engine
+
+Future
+
+↓
+
+Vision
+
+Speech
+
+Robotics
+
+==========================================================
+
+SUPPORTED AI
+
+Llama
+
+Kimi
+
+Groq
+
+Ollama
+
+Future Local Models
+
+==========================================================
+
+MEMORY INTEGRATION
+
+Working Memory
+
+Conversation Memory
+
+Knowledge Memory
+
+Workspace Memory
+
+Session Memory
+
+Long Term Memory
+
+==========================================================
+
+KNOWLEDGE INTEGRATION
+
+Knowledge Base
+
+Vector Database
+
+Semantic Search
+
+Citation Engine
+
+Knowledge Graph
+
+Repository Index
+
+==========================================================
+
+HYBRID PREDICTION
+
+Gunakan model yang sesuai
+berdasarkan kebutuhan.
+
+Transformer
+
+Sentence Transformer
+
+BERT
+
+IndoBERT
+
+Lexicon Classifier
+
+SVM (Baseline)
+
+ANN (Baseline)
+
+CNN (Image Pipeline)
+
+RNN/LSTM (Sequence Optional)
+
+LLM (Reasoning)
+
+==========================================================
+
+BIAS EVALUATION
+
+Dataset Bias
+
+Language Bias
+
+Embedding Bias
+
+Prediction Bias
+
+Class Distribution
+
+Confidence
+
+Precision
+
+Recall
+
+F1 Score
+
+==========================================================
+
+HALLUCINATION DETECTION
+
+Knowledge Match
+
+Citation Match
+
+Fact Consistency
+
+Semantic Consistency
+
+Evidence Matching
+
+Unsupported Claim Detection
+
+==========================================================
+
+HYBRID INTENSITY
+
+Hitung
+
+Semantic Score
+
+Emotion Score
+
+Lexicon Score
+
+Knowledge Score
+
+Reasoning Score
+
+Confidence Score
+
+Safety Score
+
+Bias Score
+
+Hallucination Score
+
+Final Hybrid Score
+
+==========================================================
+
+AUTOMATIC LEARNING
+
+Import Dataset
+
+Automatic Labeling
+
+Lexicon Labeling
+
+Dataset Validation
+
+Feature Generation
+
+Model Evaluation
+
+Retraining Pipeline
+
+Experiment Tracking
+
+==========================================================
+
+WORKSPACE WATCHER
+
+Pantau secara realtime
+
+Workspace
+
+Python Files
+
+Dataset
+
+Repository
+
+Knowledge
+
+SQLite
+
+Configuration
+
+Plugin
+
+==========================================================
+
+EVENT BUS
+
+WorkspaceUpdated
+
+ConversationUpdated
+
+KnowledgeUpdated
+
+DatasetUpdated
+
+RepositoryUpdated
+
+PluginLoaded
+
+TaskFinished
+
+MemoryUpdated
+
+==========================================================
+
+OUTPUT
+
+Reasoning
+
+Prediction
+
+Confidence
+
+Hybrid Score
+
+Knowledge Citation
+
+Memory Update
+
+Safety Report
+
+Task Report
+
+==========================================================
+
+SUCCESS
+
+Setiap input
+diproses melalui
+Hybrid Cognitive Pipeline.
+
+Setiap output
+divalidasi
+oleh Safety Engine.
+
+Setiap interaksi
+memperbarui
+Knowledge,
+Memory,
+Database,
+dan Dashboard
+secara realtime.
+
+Cognitive Engine
+harus modular,
+scalable,
+asynchronous,
+production-ready,
+dan dapat dikembangkan
+tanpa mengubah arsitektur inti
+Project Nexus.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-07-20T12:49:58+07:00.
+
+The user's current state is as follows:
+Other open documents:
+- c:\Users\user\Desktop\nexus\adapters\database\memory_adapter.py (LANGUAGE_PYTHON)
+- c:\Users\user\Desktop\nexus\gui\pages\settings_page.py (LANGUAGE_PYTHON)
+- c:\Users\user\Desktop\nexus\gui\main_window.py (LANGUAGE_PYTHON)
+- c:\Users\user\Desktop\nexus\supervisor.py (LANGUAGE_PYTHON)
+- c:\Users\user\Desktop\nexus\dashboard.py (LANGUAGE_PYTHON)
+</ADDITIONAL_METADATA>

@@ -1,47 +1,52 @@
 class TaskRouter:
     """
-    Task Router untuk mendeteksi tipe task dan mendelegasikan ke Agen AI yang sesuai.
-    Berdasarkan spesifikasi:
-    - coding -> Kimi
-    - reasoning -> Llama
-    - documentation -> Kimi + Llama
-    - architecture -> Llama
-    - research -> Llama + Knowledge Engine
-    - repository -> Kimi
-    - dataset -> Knowledge Engine
-    - image -> Vision Module
+    Task Router Layer v2.0 (Dual Groq Agent Orchestration)
+    Mendeteksi intent prompt dan menentukan Model Provider yang paling efisien:
+    - Groq1 (Llama-3.3-70b-versatile): Planning, Reasoning, Research, English, Architecture.
+    - Groq2 (GPT-OSS-120b): Coding, Code Review, Data Extraction, Deep Analysis.
     """
     def __init__(self):
         pass
 
-    def detect_and_route(self, prompt: str) -> list:
+    def select_provider(self, prompt: str) -> str:
         """
-        Mendeteksi tipe tugas (task type) dari prompt pengguna dan mengembalikan rute (daftar agen/modul).
-        (Implementasi regex/semantic dasar)
+        Mengembalikan nama provider ("Groq1" atau "Groq2") berdasarkan tipe tugas.
         """
         prompt_lower = prompt.lower()
-        routes = []
+        
+        # Coding & Deep Analysis -> Groq2
+        coding_keywords = ["code", "kode", "script", "function", "bug", "refactor", "class", "extract", "json"]
+        if any(kw in prompt_lower for kw in coding_keywords):
+            return "Groq2"
+            
+        # Default / Planning & General Reasoning -> Groq1
+        return "Groq1"
+
+    def detect_and_route(self, prompt: str) -> dict:
+        """
+        Mengembalikan rute komprehensif (Agen & Preferred Provider).
+        """
+        provider = self.select_provider(prompt)
+        prompt_lower = prompt.lower()
+        agents = []
         
         if any(kw in prompt_lower for kw in ["code", "kode", "script", "fungsi"]):
-            routes.append("Developer") # Kimi mapping
+            agents.append("DeveloperAgent")
             
-        if any(kw in prompt_lower for kw in ["reason", "mengapa", "analisis logika", "bagaimana"]):
-            routes.append("Planner")   # Llama mapping
+        if any(kw in prompt_lower for kw in ["reason", "mengapa", "analisis", "bagaimana"]):
+            agents.append("PlannerAgent")
             
-        if any(kw in prompt_lower for kw in ["arsitektur", "design pattern", "arsitektur sistem"]):
-            routes.append("Planner")
+        if any(kw in prompt_lower for kw in ["riset", "research", "cari tahu"]):
+            agents.append("ResearchAgent")
             
-        if any(kw in prompt_lower for kw in ["riset", "research", "cari tahu", "pelajari"]):
-            routes.append("Research")
+        if not agents:
+            agents = ["PlannerAgent", "DeveloperAgent", "ReviewerAgent"]
             
-        if any(kw in prompt_lower for kw in ["repo", "github", "git"]):
-            routes.append("GitHubAnalyzer")
-            
-        # Fallback default
-        if not routes:
-            routes = ["Planner", "Developer", "Executor", "Reviewer"]
-            
-        return routes
+        return {
+            "provider": provider,
+            "agents": agents
+        }
 
 # Global instance
 kernel_task_router = TaskRouter()
+
