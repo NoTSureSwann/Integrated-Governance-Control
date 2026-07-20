@@ -3,7 +3,7 @@ import uuid
 import threading
 from dataclasses import dataclass, field
 from PySide6.QtCore import QObject, Signal
-from core.ports.event_bus_port import IEventBus
+from ports.event_bus_port import IEventBus
 
 @dataclass
 class NexusEvent:

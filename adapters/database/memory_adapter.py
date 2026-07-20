@@ -1,7 +1,7 @@
 from adapters.database.db_manager import DatabaseManager, Conversation, Knowledge, Research, LongTerm, EnglishProgress
 from utils.logger import log_warning
 
-from core.ports.memory_port import IMemoryRepository
+from ports.memory_port import IMemoryRepository
 
 class MemoryRepositoryAdapter(IMemoryRepository):
     """

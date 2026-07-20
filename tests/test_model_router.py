@@ -21,17 +21,18 @@ class TestModelRouter(unittest.TestCase):
     def test_mock_fallback_on_missing_key(self):
         # If API key is missing, it should fallback to mock completion
         import config
-        old_key = config.GROQ_API_KEY
-        config.GROQ_API_KEY = "" # Temporarily unset key
+        old_key = config.GROQ_API_KEY_1
+        config.GROQ_API_KEY_1 = "" # Temporarily unset key
         try:
-            res = self.router.complete(
+            router = ModelRouter()
+            res = router.complete(
                 prompt="Test without key",
-                provider="Groq",
+                provider="Groq1",
                 mock=False # Don't force mock, but key is missing
             )
-            self.assertIn("[MOCK - Groq -", res)
+            self.assertIn("[MOCK - GROQ -", res)
         finally:
-            config.GROQ_API_KEY = old_key
+            config.GROQ_API_KEY_1 = old_key
 
 if __name__ == "__main__":
     unittest.main()
