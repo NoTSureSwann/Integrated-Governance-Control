@@ -36,6 +36,12 @@ class VectorDatabase:
                 if filename.startswith("."):
                     continue
                     
+                # Hanya indeks berkas teks/markdown/json
+                import os
+                ext = os.path.splitext(filename)[1].lower()
+                if ext not in [".txt", ".md", ".html", ".htm", ".json"]:
+                    continue
+                    
                 content = ingestion_engine.load_document(sector, filename)
                 if content.strip():
                     self.documents.append(content)
